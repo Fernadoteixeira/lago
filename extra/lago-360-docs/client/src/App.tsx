@@ -12,7 +12,7 @@ const Coverage = lazy(() => import("./pages/Coverage"));
 const DomainGuide = lazy(() => import("./pages/DomainGuide"));
 
 function Router() {
-  return <Suspense fallback={<main className="min-h-screen bg-[#edf0ea] p-8 font-mono text-xs text-[#0e5968]">Carregando dossiê…</main>}><Switch><Route path="/" component={Home} /><Route path="/coverage" component={Coverage} /><Route path="/docs/:slug" component={DomainGuide} /><Route component={NotFound} /></Switch></Suspense>;
+  return <Suspense fallback={<main className="grid min-h-screen place-items-center bg-[#161a24] p-8 font-mono text-xs tracking-[.08em] text-[#9fc7ff]">CARREGANDO DOCUMENTAÇÃO…</main>}><Switch><Route path="/" component={Home} /><Route path="/coverage" component={Coverage} /><Route path="/docs/:slug" component={DomainGuide} /><Route component={NotFound} /></Switch></Suspense>;
 }
 
 export default function App() {

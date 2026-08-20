@@ -74,3 +74,18 @@ O `DESIGN.md` não existia nos arquivos compartilhados nem no checkout local con
 - **Lima de sinal:** usar `#C4F16A` em rota ativa, estado válido, marcador de fluxo, seleção e numeral crítico; nunca como preenchimento dominante de superfícies extensas.
 - **Fluxo causal:** explicitar em cada seção a ligação entre evento, métrica, cobrança, valor e fatura por marcadores sequenciais e trilhas pontilhadas.
 - **Assimetria contínua:** manter tensão editorial entre painéis, tabelas e blocos de leitura; evitar que seções intermediárias virem uma landing page centralizada convencional.
+
+## Migração aprovada: fidelidade às UIs oficiais do Lago
+
+As decisões anteriores de **Atlas de Operação** permanecem registradas somente como histórico. A referência oficial capturada é a especificação de fidelidade para a próxima versão; consultar `OFFICIAL_UI_REFERENCE.md` e `DESIGN.md` antes de editar qualquer página ou estilo.
+
+### Direção selecionada
+
+**Lago Documentation & Product UI.** A experiência combina a home clara de produto, com hero amplo e ação azul, ao centro de documentação grafite com navegação horizontal, busca e cards técnicos. A cobertura 360º é preservada como conteúdo e estrutura, não como uma linguagem visual paralela.
+
+### Regras de implementação
+
+1. Navegação horizontal e marca Lago substituem a barra lateral fixa.
+2. Azul Lago é a cor de interação primária; superfícies são claras ou grafite, com bordas discretas.
+3. Cards de domínio, exemplos e grupos de navegação seguem a escala, a densidade e o raio moderado observados nas capturas.
+4. Headlines e CTAs mantêm voz técnica em pt-BR, mas seguem a hierarquia simples e centralizada das referências.
