@@ -73,7 +73,7 @@
 - [x] Implementar dossiês financeiros com estados, pré-condições, exceções e relação causal entre cobrança, fatura, pagamento e saldo.
 - [x] Adicionar exemplo idempotente de reconciliação de fatura, pagamento, crédito e wallet sem chamadas de escrita na API.
 - [x] Validar envelopes financeiros e invariantes de reconciliação localmente contra os contratos preservados.
-- [ ] Publicar o corte financeiro com testes, build, smoke test e rastreabilidade no fork.
+- [x] Publicar o corte financeiro com testes, build, smoke test e rastreabilidade no fork.
 
 - [ ] Habilitar GitHub Pages no fork e selecionar GitHub Actions como fonte de publicação.
 - [ ] Reexecutar o workflow `Lago 360 Docs` e validar a URL pública, o subcaminho `/lago/` e os ativos de referência.
