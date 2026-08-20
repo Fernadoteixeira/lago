@@ -66,9 +66,9 @@ const domains = [
   "Assinaturas",
   "Faturas",
   "Pagamentos",
-  "Wallets",
+  "Carteiras",
   "Crédito",
-  "Analytics",
+  "Análises",
 ] as const;
 
 type Domain = (typeof domains)[number];
@@ -90,13 +90,13 @@ const endpoints = [
   { domain: "Faturas", method: "POST", path: "/invoices/{lago_id}/payment_url", summary: "Gera uma URL de pagamento de fatura.", tag: "invoicing" },
   { domain: "Pagamentos", method: "POST", path: "/payments", summary: "Registra um pagamento.", tag: "collections" },
   { domain: "Pagamentos", method: "GET", path: "/payment_requests", summary: "Lista solicitações de pagamento.", tag: "collections" },
-  { domain: "Wallets", method: "GET", path: "/customers/{external_customer_id}/wallets", summary: "Consulta créditos pré-pagos de um cliente.", tag: "credits" },
-  { domain: "Wallets", method: "POST", path: "/wallet_transactions", summary: "Cria transações de saldo em wallet.", tag: "credits" },
+  { domain: "Carteiras", method: "GET", path: "/customers/{external_customer_id}/wallets", summary: "Consulta créditos pré-pagos de um cliente.", tag: "credits" },
+  { domain: "Carteiras", method: "POST", path: "/wallet_transactions", summary: "Cria transações de saldo em carteira.", tag: "credits" },
   { domain: "Crédito", method: "POST", path: "/credit_notes", summary: "Cria uma nota de crédito.", tag: "credits" },
   { domain: "Crédito", method: "PUT", path: "/credit_notes/{lago_id}/void", summary: "Anula uma nota de crédito.", tag: "credits" },
-  { domain: "Analytics", method: "GET", path: "/analytics/mrr", summary: "Consulta MRR por período.", tag: "analytics" },
-  { domain: "Analytics", method: "GET", path: "/analytics/usage", summary: "Consulta dados agregados de uso.", tag: "analytics" },
-  { domain: "Analytics", method: "GET", path: "/analytics/invoice_collection", summary: "Consulta dados de coleção de faturas.", tag: "analytics" },
+  { domain: "Análises", method: "GET", path: "/analytics/mrr", summary: "Consulta MRR por período.", tag: "analytics" },
+  { domain: "Análises", method: "GET", path: "/analytics/usage", summary: "Consulta dados agregados de uso.", tag: "analytics" },
+  { domain: "Análises", method: "GET", path: "/analytics/invoice_collection", summary: "Consulta dados de coleção de faturas.", tag: "analytics" },
 ] as const;
 
 function money(value: number) {
@@ -117,13 +117,13 @@ function calculateVolume(units: number) {
 
 function MetricRail() {
   return (
-    <div className="metric-rail" aria-label="Cadeia de billing">
+    <div className="metric-rail" aria-label="Cadeia de faturamento">
       {[
         ["01", "Evento", "transaction_id"],
         ["02", "Métrica", "agregação"],
-        ["03", "Charge", "pricing"],
+        ["03", "Charge", "preço"],
         ["04", "Fee", "valor"],
-        ["05", "Fatura", "invoice"],
+        ["05", "Fatura", "fatura"],
       ].map(([index, title, caption], indexPosition) => (
         <div className="rail-stage" key={title}>
           <div className={`rail-node ${indexPosition === 1 || indexPosition === 3 ? "rail-node--signal" : ""}`}>{index}</div>
@@ -164,7 +164,7 @@ export default function Home() {
 
   const panelContent = {
     contract: {
-      eyebrow: "Contrato do request",
+      eyebrow: "Contrato da requisição",
       code: payload,
       title: "O lote é um envelope de eventos completos.",
       text: "Cada item conserva a sua assinatura, a métrica que será medida e um identificador de transação que permite rastreamento e idempotência.",
@@ -179,8 +179,8 @@ export default function Home() {
       title: "200 confirma recepção; não confirma faturamento imediato.",
       text: "O processamento é assíncrono. Na resposta inicial, lago_customer_id pode ser null, porque a correlação do cliente acontece no pipeline posterior.",
       notes: [
-        ["T0", "Batch recebido pela API."],
-        ["T1", "Uso processado e disponível para compor billing."],
+        ["T0", "Lote recebido pela API."],
+        ["T1", "Uso processado e disponível para compor o faturamento."],
       ],
     },
     errors: {
@@ -220,50 +220,50 @@ export default function Home() {
         </nav>
 
         <div className="sidebar-dossier">
-          <span>DOSSIER ATIVO</span>
+          <span>DOSSIÊ ATIVO</span>
           <strong>Lago API 1.51.0</strong>
-          <p>Batch events · usage pricing · OpenAPI.</p>
-          <button onClick={() => scrollTo("openapi")}><Search size={14} />Explorar endpoints</button>
+          <p>Batch events · precificação por uso · OpenAPI.</p>
+          <button onClick={() => scrollTo("openapi")}><Search size={14} />Explorar rotas</button>
         </div>
       </aside>
 
       <main className="atlas-main">
         <header className="topline">
           <div><span className="live-dot" />Documentação operacional</div>
-          <div className="topline-meta">OPENAPI · BATCH EVENTS · USAGE PRICING</div>
+          <div className="topline-meta">OPENAPI · BATCH EVENTS · PRECIFICAÇÃO POR USO</div>
         </header>
 
         <section id="overview" className="hero-section scroll-target">
           <div className="hero-copy">
-            <p className="eyebrow">Atlas de operação / Lago Billing</p>
+            <p className="eyebrow">Atlas de operação / Faturamento Lago</p>
             <h1>Do uso bruto<br /><em>à evidência</em><br />de cobrança.</h1>
             <p className="hero-summary">Uma leitura 360º do caminho que liga eventos de produto, regras de metering, modelos de preço e faturas no Lago.</p>
             <div className="hero-actions">
               <Button className="atlas-button" onClick={() => scrollTo("batch")}>Mapear batch events <ArrowDownRight size={17} /></Button>
-              <button className="text-action" onClick={() => scrollTo("pricing")}>Comparar pricing <ArrowUpRight size={16} /></button>
+              <button className="text-action" onClick={() => scrollTo("pricing")}>Comparar preços <ArrowUpRight size={16} /></button>
             </div>
           </div>
           <div className="hero-panel">
-            <div className="hero-panel-top"><span>FLUXO DE REFERÊNCIA</span><span>05 STAGES</span></div>
+            <div className="hero-panel-top"><span>FLUXO DE REFERÊNCIA</span><span>05 ETAPAS</span></div>
             <MetricRail />
             <div className="hero-panel-note"><Sparkles size={15} />Toda decisão financeira pode ser lida como uma cadeia de evidências.</div>
           </div>
         </section>
 
         <section className="signal-strip" aria-label="Resumo da API">
-          <div><strong>122</strong><span>paths no bundle OpenAPI</span></div>
+          <div><strong>122</strong><span>rotas no bundle OpenAPI</span></div>
           <div><strong>202</strong><span>operações catalogadas</span></div>
-          <div><strong>100</strong><span>eventos por batch</span></div>
-          <div><strong>2</strong><span>modelos comparados aqui</span></div>
+          <div><strong>100</strong><span>eventos por lote</span></div>
+          <div><strong>2</strong><span>modelos comparados</span></div>
         </section>
 
         <section id="batch" className="content-section batch-section scroll-target">
           <div className="section-heading">
             <div><p className="eyebrow">01 / Ingestão</p><h2>Batch events sem zonas cegas.</h2></div>
-            <p>O batching reduz overhead de transporte; a interpretação de cada item continua dependente da assinatura, métrica, propriedades e regras aplicáveis.</p>
+            <p>O agrupamento reduz o overhead de transporte; a interpretação de cada item continua dependente da assinatura, métrica, propriedades e regras aplicáveis.</p>
           </div>
 
-          <div className="batch-tabs" role="tablist" aria-label="Detalhes do batch events">
+          <div className="batch-tabs" role="tablist" aria-label="Detalhes de batch events">
             {(["contract", "response", "errors"] as BatchPanel[]).map((panel) => (
               <button key={panel} role="tab" aria-selected={batchPanel === panel} className={batchPanel === panel ? "is-active" : ""} onClick={() => setBatchPanel(panel)}>
                 {panel === "contract" ? "Contrato" : panel === "response" ? "Resposta" : "Falhas"}
@@ -283,14 +283,14 @@ export default function Home() {
               <div className="fact-grid">
                 {selectedPanel.notes.map(([label, value]) => <div key={label}><span>{label}</span><strong>{value}</strong></div>)}
               </div>
-              <div className="batch-rule"><Database size={17} /><span><b>Limite documentado:</b> um request aceita até 100 eventos. O array não cria agregação implícita.</span></div>
+              <div className="batch-rule"><Database size={17} /><span><b>Limite documentado:</b> uma requisição aceita até 100 eventos. O array não cria agregação implícita.</span></div>
             </div>
           </div>
         </section>
 
         <section id="pricing" className="content-section pricing-section scroll-target">
           <div className="section-heading pricing-heading">
-            <div><p className="eyebrow">02 / Pricing</p><h2>O mesmo uso conta histórias de receita diferentes.</h2></div>
+            <div><p className="eyebrow">02 / Precificação</p><h2>O mesmo uso conta histórias de receita diferentes.</h2></div>
             <p>Simulador didático baseado em três faixas: 0–100 a US$ 0,10, 101–500 a US$ 0,08, e 501+ a US$ 0,05 por unidade.</p>
           </div>
 
@@ -312,7 +312,7 @@ export default function Home() {
             </div>
 
             <div className="pricing-ruler">
-              <div className="ruler-head"><span>FAIXAS CONFIGURADAS</span><span>MODELO ATIVO: {model.toUpperCase()}</span></div>
+              <div className="ruler-head"><span>FAIXAS CONFIGURADAS</span><span>MODELO ATIVO: {model === "graduated" ? "GRADUATED" : "VOLUME"}</span></div>
               {[{ range: "0–100", rate: "US$ 0,10", width: "100%" }, { range: "101–500", rate: "US$ 0,08", width: "77%" }, { range: "501+", rate: "US$ 0,05", width: "48%" }].map((tier, index) => (
                 <div className={`tier-row ${model === "volume" && ((units <= 100 && index === 0) || (units > 100 && units <= 500 && index === 1) || (units > 500 && index === 2)) ? "is-selected" : ""}`} key={tier.range}>
                   <strong>{tier.range}</strong><div className="tier-bar"><i style={{ width: tier.width }} /></div><span>{tier.rate}/un.</span>
@@ -328,30 +328,30 @@ export default function Home() {
         <section id="openapi" className="content-section explorer-section scroll-target">
           <div className="section-heading">
             <div><p className="eyebrow">03 / OpenAPI</p><h2>Explore o contrato por domínio.</h2></div>
-            <p>Filtre os domínios centrais, pesquise por path e encontre rapidamente a operação que conecta o seu fluxo de produto ao Lago.</p>
+            <p>Filtre os domínios centrais, pesquise por rota e encontre rapidamente a operação que conecta o seu fluxo de produto ao Lago.</p>
           </div>
           <div className="explorer-tools">
             <div className="domain-filters" aria-label="Filtros de domínio">
               {domains.map((item) => <button key={item} className={domain === item ? "is-active" : ""} onClick={() => setDomain(item)}>{item}</button>)}
             </div>
-            <label className="search-field"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar path ou operação" aria-label="Buscar endpoint" /><span>{visibleEndpoints.length}</span></label>
+            <label className="search-field"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar rota ou operação" aria-label="Buscar rota" /><span>{visibleEndpoints.length}</span></label>
           </div>
           <div className="endpoint-list" aria-live="polite">
             {visibleEndpoints.map((endpoint) => <article className="endpoint-row" key={`${endpoint.method}-${endpoint.path}`}><span className={`method method-${endpoint.method.toLowerCase()}`}>{endpoint.method}</span><code>{endpoint.path}</code><p>{endpoint.summary}</p><span className="endpoint-domain">{endpoint.domain}</span></article>)}
-            {!visibleEndpoints.length && <div className="empty-state">Nenhum endpoint corresponde ao filtro. Tente buscar por “invoice”, “subscription” ou “events”.</div>}
+            {!visibleEndpoints.length && <div className="empty-state">Nenhuma rota corresponde ao filtro. Tente buscar por “invoice”, “subscription” ou “events”.</div>}
           </div>
         </section>
 
         <section id="sources" className="content-section provenance-section scroll-target">
-          <div className="section-heading"><div><p className="eyebrow">04 / Proveniência</p><h2>Fontes preservadas para investigação contínua.</h2></div><p>Os raws OpenAPI, páginas de pricing e capturas renderizadas foram mantidos com inventário e SHA-256 para apoiar análise técnica e criação de referências.</p></div>
+          <div className="section-heading"><div><p className="eyebrow">04 / Proveniência</p><h2>Fontes preservadas para investigação contínua.</h2></div><p>As fontes brutas do OpenAPI, páginas de cobrança e capturas renderizadas foram mantidas com inventário e SHA-256 para apoiar análise técnica e criação de referências.</p></div>
           <div className="provenance-grid">
             <a className="source-doc" href="https://github.com/getlago/lago-openapi" target="_blank" rel="noreferrer"><FileCode2 size={26} /><span>OpenAPI</span><strong>Bundle e schemas oficiais</strong><em>getlago/lago-openapi <ArrowUpRight size={14} /></em></a>
-            <a className="source-doc" href="https://getlago.com/docs/guide/plans/charges/charge-models/graduated" target="_blank" rel="noreferrer"><Gauge size={26} /><span>Pricing</span><strong>Modelo graduated</strong><em>Documentação oficial <ArrowUpRight size={14} /></em></a>
-            <a className="source-doc" href="https://getlago.com/docs/guide/plans/charges/charge-models/volume" target="_blank" rel="noreferrer"><Layers3 size={26} /><span>Pricing</span><strong>Modelo volume</strong><em>Documentação oficial <ArrowUpRight size={14} /></em></a>
+            <a className="source-doc" href="https://getlago.com/docs/guide/plans/charges/charge-models/graduated" target="_blank" rel="noreferrer"><Gauge size={26} /><span>Pricing</span><strong>Modelo Graduated</strong><em>Documentação oficial <ArrowUpRight size={14} /></em></a>
+            <a className="source-doc" href="https://getlago.com/docs/guide/plans/charges/charge-models/volume" target="_blank" rel="noreferrer"><Layers3 size={26} /><span>Pricing</span><strong>Modelo Volume</strong><em>Documentação oficial <ArrowUpRight size={14} /></em></a>
           </div>
           <div className="visual-references">
             <figure><img src="/manus-storage/lago-landing-reference_686d2548.png" alt="Captura preservada da navegação de documentação do Lago em tema escuro" /><figcaption>Referência visual: navegação e busca da documentação.</figcaption></figure>
-            <figure><img src="/manus-storage/lago-docs-reference_3d11d3f7.png" alt="Captura preservada da landing institucional do Lago com mockup de fatura" /><figcaption>Referência visual: produto, uso, créditos e invoice.</figcaption></figure>
+            <figure><img src="/manus-storage/lago-docs-reference_3d11d3f7.png" alt="Captura preservada da landing institucional do Lago com mockup de fatura" /><figcaption>Referência visual: produto, uso, créditos e fatura.</figcaption></figure>
           </div>
         </section>
 
