@@ -1,6 +1,7 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { gzipSync } from "node:zlib";
 
 const publicDirectory = fileURLToPath(
   new URL("../dist/public/", import.meta.url)
@@ -28,6 +29,7 @@ const assetSizes = await Promise.all(
   assetNames.map(async assetName => ({
     assetName,
     bytes: (await stat(join(assetsDirectory, assetName))).size,
+    gzipBytes: gzipSync(await readFile(join(assetsDirectory, assetName))).length,
   }))
 );
 
@@ -38,23 +40,30 @@ const stylesheetBytes = assetSizes
   .filter(({ assetName }) => assetName.endsWith(".css"))
   .reduce((total, { bytes }) => total + bytes, 0);
 
+const javascriptGzipBytes = assetSizes
+  .filter(({ assetName }) => assetName.endsWith(".js"))
+  .reduce((total, { gzipBytes }) => total + gzipBytes, 0);
+const stylesheetGzipBytes = assetSizes
+  .filter(({ assetName }) => assetName.endsWith(".css"))
+  .reduce((total, { gzipBytes }) => total + gzipBytes, 0);
+
 const budgets = {
-  javascript: 450_000,
-  stylesheet: 180_000,
+  javascriptGzip: 260_000,
+  stylesheetGzip: 30_000,
 };
 
-if (javascriptBytes > budgets.javascript) {
+if (javascriptGzipBytes > budgets.javascriptGzip) {
   throw new Error(
-    `JavaScript budget exceeded: ${javascriptBytes} bytes > ${budgets.javascript} bytes.`
+    `JavaScript gzip budget exceeded: ${javascriptGzipBytes} bytes > ${budgets.javascriptGzip} bytes.`
   );
 }
 
-if (stylesheetBytes > budgets.stylesheet) {
+if (stylesheetGzipBytes > budgets.stylesheetGzip) {
   throw new Error(
-    `Stylesheet budget exceeded: ${stylesheetBytes} bytes > ${budgets.stylesheet} bytes.`
+    `Stylesheet gzip budget exceeded: ${stylesheetGzipBytes} bytes > ${budgets.stylesheetGzip} bytes.`
   );
 }
 
 console.log(
-  `Build smoke test passed: ${javascriptBytes} bytes JavaScript, ${stylesheetBytes} bytes CSS.`
+  `Build smoke test passed: ${javascriptBytes} bytes JavaScript (${javascriptGzipBytes} gzip), ${stylesheetBytes} bytes CSS (${stylesheetGzipBytes} gzip).`
 );

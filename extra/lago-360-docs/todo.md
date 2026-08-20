@@ -58,6 +58,15 @@
 - [x] Aplicar o mesmo sistema visual às rotas de matriz e dossiês, preservando URLs, estados e evidências comerciais.
 - [x] Validar fidelidade em desktop e mobile, executar os gates técnicos e publicar a migração visual no fork.
 
+### Descoberta e interação da documentação
+
+- [x] Inventariar rotas, domínios, métodos e estados pesquisáveis para um índice de navegação canônico.
+- [x] Implementar busca por rota com resultados agrupados, atalho de teclado e navegação direta para o dossiê ou seção encontrada.
+- [x] Adicionar filtros combináveis por domínio, método HTTP, estágio do fluxo e estado de cobertura.
+- [x] Incluir carregamento percebido e transições acessíveis entre as rotas da documentação.
+- [x] Evoluir os cardblocks da home com detalhes de interação e animações Framer Motion compatíveis com a UI oficial.
+- [ ] Validar desktop, mobile, teclado, redução de movimento, testes e publicação no fork.
+
 - [ ] Habilitar GitHub Pages no fork e selecionar GitHub Actions como fonte de publicação.
 - [ ] Reexecutar o workflow `Lago 360 Docs` e validar a URL pública, o subcaminho `/lago/` e os ativos de referência.
 - [ ] Criar uma matriz rastreável OpenAPI → domínio funcional → tela → exemplo SDK → fonte bruta para identificar lacunas de cobertura.
