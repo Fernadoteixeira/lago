@@ -21,8 +21,8 @@ function Router() {
     <WouterRouter base={basePath}>
       <Suspense
         fallback={
-          <main className="min-h-screen bg-[#edf0ea] p-8 font-mono text-xs text-[#0e5968]">
-            Carregando dossiê…
+          <main className="grid min-h-screen place-items-center bg-[#161a24] p-8 font-mono text-xs tracking-[.08em] text-[#9fc7ff]">
+            CARREGANDO DOCUMENTAÇÃO…
           </main>
         }
       >

@@ -16,4 +16,8 @@ As capturas abaixo foram renderizadas localmente a partir dos HTMLs fornecidos p
 | `lago-landing-reference.png` | `8b0a7aa63eb3b4e7a25c5ffa6aaf6e2a56ecb54419b2a72e724f32d64b235ad7` |
 | `lago-docs-reference.png` | `30ee96429f356c077d600cae7ecfb4ae9a7bf8ca9883861c8e820ccdf062937f` |
 
-As referências são insumos de design e não alteram o contrato visual Atlas de Operação documentado em `DESIGN.md`.
+## Aplicação na UI 360º
+
+A partir da decisão de migração para fidelidade visual, as capturas passaram a ser o contrato de referência para a camada de apresentação. A home combina o hero claro, a navegação horizontal e os CTAs azuis da landing institucional com o shell grafite, o índice técnico, a busca e os cartões discretos da documentação oficial. A arquitetura de conteúdo 360º permanece própria: matriz, dossiês, evidências, exemplos e referências OpenAPI não foram removidos.
+
+Em 20 de agosto de 2026, a home, a matriz e o guia de métricas foram verificados em desktop e em viewport móvel de 390 px. A composição preserva leitura, navegação, busca e progressão dos blocos técnicos nos dois formatos.

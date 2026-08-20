@@ -41,7 +41,7 @@ const result = {
 try {
   await page.goto(route(), { waitUntil: "networkidle" });
   await visible(
-    page.getByRole("heading", { name: /Do uso bruto/ }),
+    page.getByRole("heading", { name: /Documentação para o seu billing baseado em uso/ }),
     "hero do simulador"
   );
   result.checks.push("home-rendered");
@@ -63,7 +63,7 @@ try {
   await responseTab.click();
   await selected(responseTab, "aba Resposta");
   await visible(
-    page.getByText("200 confirma recepção; não confirma faturamento imediato."),
+    page.getByText("200 confirma recepção, não faturamento imediato."),
     "conteúdo da resposta"
   );
   result.checks.push("batch-tabs");
@@ -71,10 +71,7 @@ try {
   const slider = page.getByRole("slider", { name: "Uso agregado no período" });
   await slider.press("End");
   await assert.doesNotReject(async () => slider.waitFor({ state: "visible" }));
-  assert.equal(
-    await page.locator(".units-readout strong").textContent(),
-    "900"
-  );
+  assert.equal(await page.locator("#units").inputValue(), "900");
   const volumeTab = page.getByRole("tab", { name: /Por volume/ });
   await volumeTab.click();
   await selected(volumeTab, "aba Por volume");
@@ -115,7 +112,7 @@ try {
 
   await page.goto(route("coverage"), { waitUntil: "networkidle" });
   await visible(
-    page.getByRole("heading", { name: /Do contrato/ }),
+    page.getByRole("heading", { name: /Visibilidade sobre cada domínio de billing/ }),
     "matriz de cobertura"
   );
   const implementationTab = page.getByRole("tab", {
@@ -125,13 +122,14 @@ try {
   await implementationTab.click();
   await selected(implementationTab, "filtro Em implementação");
   const coverageSearch = page.getByRole("textbox", {
-    name: "Buscar domínio de cobertura",
+    name: "Buscar domínio ou contrato",
   });
   await coverageSearch.fill("Eventos");
-  await visible(page.locator("#eventos"), "domínio Eventos");
+  const eventosDomain = page.getByRole("article").filter({ hasText: "Eventos de uso" });
+  await visible(eventosDomain, "domínio Eventos");
   assert.equal(await page.locator("article").count(), 1);
   await page
-    .getByRole("link", { name: "Abrir guia de Eventos de uso" })
+    .getByRole("link", { name: /Abrir guia de Eventos de uso/ })
     .click();
   await page.waitForURL(/\/docs\/eventos/);
   await visible(

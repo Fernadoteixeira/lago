@@ -50,6 +50,14 @@
 - [x] Rejeitar IDs duplicados e IDs de erro que não pertencem ao lote original.
 - [x] Adicionar o gate `test:batch-contract` ao CI antes do build e documentar a execução reproduzível.
 
+### Migração para UI oficial do Lago
+
+- [x] Inventariar os padrões visuais, a navegação, os tokens e os componentes observáveis nas capturas oficiais preservadas.
+- [x] Atualizar o contrato visual para substituir o Atlas de Operação por uma composição fiel à UI oficial, sem remover conteúdo 360º.
+- [x] Reestruturar cabeçalho, navegação, hero, índices e superfícies da página principal segundo a referência oficial.
+- [x] Aplicar o mesmo sistema visual às rotas de matriz e dossiês, preservando URLs, estados e evidências comerciais.
+- [x] Validar fidelidade em desktop e mobile, executar os gates técnicos e publicar a migração visual no fork.
+
 - [ ] Habilitar GitHub Pages no fork e selecionar GitHub Actions como fonte de publicação.
 - [ ] Reexecutar o workflow `Lago 360 Docs` e validar a URL pública, o subcaminho `/lago/` e os ativos de referência.
 - [ ] Criar uma matriz rastreável OpenAPI → domínio funcional → tela → exemplo SDK → fonte bruta para identificar lacunas de cobertura.
