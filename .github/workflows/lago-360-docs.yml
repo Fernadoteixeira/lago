@@ -54,6 +54,16 @@ jobs:
       - name: Typecheck
         run: pnpm check
 
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Validate executable examples
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check examples/batch-events/batch-events.mjs
+          python3 -m py_compile examples/batch-events/batch_events.py
+
       - name: Build static bundle
         run: pnpm build
         env:

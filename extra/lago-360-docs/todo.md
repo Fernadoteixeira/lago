@@ -27,6 +27,14 @@
 
 ## Cobertura 360º — continuidade end-to-end
 
+### Iteração de engenharia prioritária
+
+- [x] Gerar a matriz de cobertura a partir do bundle OpenAPI e expor seus indicadores na interface.
+- [x] Implementar páginas profundas para fundamentos, eventos, métricas, planos, assinaturas e faturas com rotas compartilháveis.
+- [ ] Criar exemplos verificáveis de fluxo ponta a ponta em Python e Node.js usando os contratos já extraídos.
+- [ ] Adicionar testes de interface para simulador, filtros OpenAPI, busca, navegação e cópia de payload.
+- [ ] Adicionar gates de CI para links, Markdown, matriz de cobertura e regressão de bundle.
+
 - [ ] Habilitar GitHub Pages no fork e selecionar GitHub Actions como fonte de publicação.
 - [ ] Reexecutar o workflow `Lago 360 Docs` e validar a URL pública, o subcaminho `/lago/` e os ativos de referência.
 - [ ] Criar uma matriz rastreável OpenAPI → domínio funcional → tela → exemplo SDK → fonte bruta para identificar lacunas de cobertura.

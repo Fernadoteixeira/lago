@@ -23,6 +23,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { calculateGraduated, calculateVolume } from "@/lib/pricing";
+import { Link } from "wouter";
 
 type BatchPanel = "contract" | "response" | "errors";
 type ChargeModel = "graduated" | "volume";
@@ -101,18 +103,6 @@ const endpoints = [
 
 function money(value: number) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
-}
-
-function calculateGraduated(units: number) {
-  const tierOne = Math.min(units, 100) * 0.1;
-  const tierTwo = Math.max(Math.min(units, 500) - 100, 0) * 0.08;
-  const tierThree = Math.max(units - 500, 0) * 0.05;
-  return { total: tierOne + tierTwo + tierThree, pieces: [tierOne, tierTwo, tierThree] };
-}
-
-function calculateVolume(units: number) {
-  const rate = units <= 100 ? 0.1 : units <= 500 ? 0.08 : 0.05;
-  return { total: units * rate, rate };
 }
 
 function MetricRail() {
@@ -221,6 +211,7 @@ export default function Home() {
               <Icon size={16} strokeWidth={1.8} /><span>{label as string}</span><ChevronRight size={14} />
             </button>
           ))}
+          <Link href="/coverage" className="nav-link"><FileCode2 size={16} strokeWidth={1.8} /><span>Matriz 360º</span><ArrowUpRight size={14} /></Link>
         </nav>
 
         <div className="sidebar-dossier">

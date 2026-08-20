@@ -58,6 +58,10 @@ jspm_packages/
 # TypeScript cache
 *.tsbuildinfo
 
+# Python bytecode generated while validating executable examples
+__pycache__/
+*.py[cod]
+
 # Optional npm cache directory
 .npm
 
