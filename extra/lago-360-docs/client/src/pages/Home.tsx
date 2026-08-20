@@ -3,6 +3,7 @@
  * navegação horizontal, busca contextual, CTAs azuis e cards de borda discreta.
  */
 import { useMemo, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { toast } from "sonner";
 import {
   Activity,
@@ -22,6 +23,7 @@ import {
   Users,
 } from "lucide-react";
 import { Link } from "wouter";
+import { openDocumentationSearch } from "@/components/DocumentationSearch";
 import { calculateGraduated, calculateVolume } from "@/lib/pricing";
 
 type BatchPanel = "contract" | "response" | "errors";
@@ -127,7 +129,7 @@ export default function Home() {
       <header className="lago-header">
         <div className="lago-header-main">
           <Link href="/" className="lago-brand" aria-label="Lago 360º — início"><LagoMark /><strong>Lago</strong></Link>
-          <label className="global-search"><Search size={16} /><input value={query} onChange={(event) => setQuery(event.target.value)} onFocus={() => scrollTo("openapi")} placeholder="Buscar documentação..." aria-label="Buscar na documentação" /><kbd>Ctrl K</kbd></label>
+          <button type="button" className="global-search global-search-trigger" onClick={openDocumentationSearch} aria-label="Abrir busca de documentação"><Search size={16} /><span>Buscar documentação…</span><kbd>Ctrl K</kbd></button>
           <div className="lago-header-actions"><span className="header-link">Lago 360º</span><a className="primary-cta" href="#batch">Começar <ArrowRight size={15} /></a></div>
         </div>
         <nav className="lago-doc-nav" aria-label="Navegação principal">
@@ -141,7 +143,7 @@ export default function Home() {
           <div className="official-hero-copy"><span className="hero-kicker">Lago 360º Billing Docs</span><h1>Documentação para o seu billing baseado em uso.</h1><p>Explore o fluxo completo de eventos, medição, precificação, assinaturas e faturas no Lago — em português e com evidência contratual preservada.</p><div className="hero-actions"><button className="primary-cta" onClick={() => scrollTo("batch")}>Explorar guias <ArrowRight size={16} /></button><Link href="/coverage" className="secondary-cta">Ver matriz 360º</Link></div></div>
         </section>
 
-        <section className="entry-section" aria-labelledby="entry-heading"><h2 id="entry-heading">Comece com os guias e referências de billing</h2><div className="entry-grid">{guideEntries.map((entry) => { const Icon = entry.icon; const body = <><Icon size={25} strokeWidth={1.8} /><h3>{entry.title}</h3><p>{entry.text}</p><span>Explorar <ArrowRight size={15} /></span></>; return entry.href.startsWith("/") ? <Link key={entry.title} href={entry.href} className="entry-card">{body}</Link> : <a key={entry.title} href={entry.href} className="entry-card">{body}</a>; })}</div></section>
+        <section className="entry-section" aria-labelledby="entry-heading"><h2 id="entry-heading">Comece com os guias e referências de billing</h2><div className="entry-grid">{guideEntries.map((entry, index) => { const Icon = entry.icon; const body = <><div className="entry-card-meta"><small>{String(index + 1).padStart(2, "0")}</small><em>360º</em></div><Icon size={25} strokeWidth={1.8} /><h3>{entry.title}</h3><p>{entry.text}</p><span>Explorar <ArrowRight size={15} /></span></>; const destination = entry.href.startsWith("/") ? <Link href={entry.href} className="entry-card">{body}</Link> : <a href={entry.href} className="entry-card">{body}</a>; return <motion.div key={entry.title} className="entry-card-motion" initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} whileHover={{ y: -4 }} whileTap={{ scale: 0.985 }} transition={{ duration: 0.22, delay: index * 0.035, ease: [0.23, 1, 0.32, 1] }}>{destination}</motion.div>; })}</div></section>
 
         <div className="docs-shell">
           <section className="docs-intro"><span>DOCUMENTAÇÃO TÉCNICA</span><h2>Da atividade do produto à cobrança auditável.</h2><p>Os guias 360º preservam a sequência operacional sem abstrair contratos, limites, respostas ou referências da API.</p><div className="docs-stat-row"><div><strong>122</strong><span>paths no OpenAPI</span></div><div><strong>202</strong><span>operações catalogadas</span></div><div><strong>100</strong><span>eventos por lote</span></div></div></section>
