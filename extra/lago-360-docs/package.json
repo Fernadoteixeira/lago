@@ -12,6 +12,7 @@
     "test": "vitest run",
     "test:contract": "node examples/commercial-flow/validate-contract.mjs",
     "test:batch-contract": "node examples/batch-events/validate-contract.mjs && python3 examples/batch-events/validate_contract.py",
+    "test:financial-contract": "node examples/financial-reconciliation/validate-contract.mjs",
     "test:ui": "node scripts/verify-ui.mjs",
     "test:concurrency": "node scripts/verify-concurrency.mjs",
     "test:subpaths": "node scripts/verify-subpaths.mjs",

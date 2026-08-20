@@ -67,6 +67,9 @@ jobs:
           python3 -m py_compile examples/batch-events/batch_events.py
           node --check examples/commercial-flow/commercial-flow.mjs
           python3 -m py_compile examples/commercial-flow/commercial_flow.py
+          pnpm test:financial-contract
+          node --check examples/financial-reconciliation/reconcile.mjs
+          python3 -m py_compile examples/financial-reconciliation/reconcile.py
 
       - name: Contract concurrency test
         run: pnpm test:concurrency
