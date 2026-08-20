@@ -4,12 +4,12 @@ Estes exemplos enviam até 100 eventos para `POST /events/batch`, separam os ite
 
 > Execute apenas em um ambiente no qual os códigos de métrica, a assinatura e os `transaction_id` de demonstração sejam seguros. A idempotência depende de manter cada `transaction_id` estável em reenvios.
 
-| Variável | Finalidade | Exemplo |
-|---|---|---|
-| `LAGO_API_URL` | Base regional da API | `https://api.getlago.com/api/v1` ou `https://api.eu.getlago.com/api/v1` |
-| `LAGO_API_KEY` | Chave bearer de ambiente | Nunca registre este valor em logs ou no repositório. |
-| `LAGO_SUBSCRIPTION_ID` | ID externo da assinatura | `sub_acme_pro` |
-| `LAGO_METRIC_CODE` | Código de métrica faturável ativo | `api_calls` |
+| Variável               | Finalidade                        | Exemplo                                                                 |
+| ---------------------- | --------------------------------- | ----------------------------------------------------------------------- |
+| `LAGO_API_URL`         | Base regional da API              | `https://api.getlago.com/api/v1` ou `https://api.eu.getlago.com/api/v1` |
+| `LAGO_API_KEY`         | Chave bearer de ambiente          | Nunca registre este valor em logs ou no repositório.                    |
+| `LAGO_SUBSCRIPTION_ID` | ID externo da assinatura          | `sub_acme_pro`                                                          |
+| `LAGO_METRIC_CODE`     | Código de métrica faturável ativo | `api_calls`                                                             |
 
 ## Node.js
 
@@ -30,3 +30,5 @@ python3 examples/batch-events/batch_events.py
 ```
 
 Os dois scripts encerram com erro quando a API retornar erro HTTP. Uma resposta de lote que contenha itens inválidos continua sendo tratada como diagnóstico de negócio: os itens aceitos não são reenviados, e a lista de pendências é impressa para correção seletiva.
+
+A camada `batch-contract` valida localmente o envelope com 1 a 100 eventos, `transaction_id` único, campos de identidade não vazios e propriedades numéricas. Ela também reconcilia os IDs retornados em `errors` contra o lote original; um ID desconhecido é rejeitado para evitar retry de um evento que não foi enviado. O mesmo contrato é exercitado em Node.js e Python por `pnpm test:batch-contract` e executado no CI antes do build.

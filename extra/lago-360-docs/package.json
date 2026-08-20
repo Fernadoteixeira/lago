@@ -11,6 +11,7 @@
     "check": "tsc --noEmit",
     "test": "vitest run",
     "test:contract": "node examples/commercial-flow/validate-contract.mjs",
+    "test:batch-contract": "node examples/batch-events/validate-contract.mjs && python3 examples/batch-events/validate_contract.py",
     "smoke-test": "node scripts/verify-build.mjs",
     "format": "prettier --write ."
   },

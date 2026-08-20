@@ -62,6 +62,7 @@ jobs:
         run: |
           set -euo pipefail
           pnpm test:contract
+          pnpm test:batch-contract
           node --check examples/batch-events/batch-events.mjs
           python3 -m py_compile examples/batch-events/batch_events.py
           node --check examples/commercial-flow/commercial-flow.mjs

@@ -31,7 +31,7 @@
 
 - [x] Gerar a matriz de cobertura a partir do bundle OpenAPI e expor seus indicadores na interface.
 - [x] Implementar páginas profundas para fundamentos, eventos, métricas, planos, assinaturas e faturas com rotas compartilháveis.
-- [ ] Criar exemplos verificáveis de fluxo ponta a ponta em Python e Node.js usando os contratos já extraídos.
+- [x] Criar exemplos verificáveis de fluxo ponta a ponta em Python e Node.js usando os contratos já extraídos para os cortes comercial e de batch events.
 - [ ] Adicionar testes de interface para simulador, filtros OpenAPI, busca, navegação e cópia de payload.
 - [ ] Adicionar gates de CI para links, Markdown, matriz de cobertura e regressão de bundle.
 
@@ -42,6 +42,13 @@
 - [x] Adicionar um exemplo ponta a ponta que crie métrica, plano com charge, cliente, assinatura e evento de uso idempotente.
 - [x] Validar localmente os payloads de exemplo contra os schemas OpenAPI preservados e testar a composição comercial sem chamadas destrutivas.
 - [x] Publicar o corte canônico com testes, build, smoke test e rastreabilidade no fork.
+
+### Corte canônico de ingestão — batch events
+
+- [x] Validar envelope de 1 a 100 eventos, identidade estável e propriedades numéricas em Node.js e Python.
+- [x] Reconciliar erros por `transaction_id`, separar aceites e rejeições e gerar retry seletivo sem reenviar itens aceitos.
+- [x] Rejeitar IDs duplicados e IDs de erro que não pertencem ao lote original.
+- [x] Adicionar o gate `test:batch-contract` ao CI antes do build e documentar a execução reproduzível.
 
 - [ ] Habilitar GitHub Pages no fork e selecionar GitHub Actions como fonte de publicação.
 - [ ] Reexecutar o workflow `Lago 360 Docs` e validar a URL pública, o subcaminho `/lago/` e os ativos de referência.

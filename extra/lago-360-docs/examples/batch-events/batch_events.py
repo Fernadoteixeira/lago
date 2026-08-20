@@ -12,6 +12,8 @@ from typing import Any
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
+from batch_contract import select_batch_outcome, validate_batch_request
+
 API_URL = os.getenv("LAGO_API_URL", "https://api.getlago.com/api/v1").rstrip("/")
 API_KEY = os.getenv("LAGO_API_KEY")
 SUBSCRIPTION_ID = os.getenv("LAGO_SUBSCRIPTION_ID")
@@ -41,13 +43,6 @@ def send_batch(events: list[dict[str, Any]]) -> dict[str, Any]:
         raise RuntimeError(f"Lago respondeu {exc.code}: {detail}") from exc
 
 
-def failures_by_transaction_id(errors: dict[str, Any] | None) -> list[dict[str, str]]:
-    failures: list[dict[str, str]] = []
-    for reason, transaction_ids in (errors or {}).items():
-        if isinstance(transaction_ids, list):
-            failures.extend({"transaction_id": str(transaction_id), "reason": reason} for transaction_id in transaction_ids)
-    return failures
-
 
 run_id = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
 events = [
@@ -61,10 +56,9 @@ events = [
     for index, requests in enumerate((25, 50), start=1)
 ]
 
-result = send_batch(events)
-failures = failures_by_transaction_id(result.get("errors"))
-failed_ids = {failure["transaction_id"] for failure in failures}
-accepted = [event["transaction_id"] for event in events if event["transaction_id"] not in failed_ids]
-print(json.dumps({"accepted": accepted, "failures": failures}, indent=2, ensure_ascii=False))
-if failures:
-    print("Corrija apenas estes eventos antes de reenviar:", ", ".join(failure["transaction_id"] for failure in failures))
+payload = validate_batch_request({"events": events})
+result = send_batch(payload["events"])
+outcome = select_batch_outcome(payload["events"], result.get("errors"))
+print(json.dumps({"accepted": [event["transaction_id"] for event in outcome["accepted"]], "failures": outcome["failures"]}, indent=2, ensure_ascii=False))
+if outcome["retry"]:
+    print("Corrija apenas estes eventos antes de reenviar:", ", ".join(event["transaction_id"] for event in outcome["retry"]))
