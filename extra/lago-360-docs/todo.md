@@ -24,3 +24,20 @@
 - [x] Inventariar textos visíveis, atributos de acessibilidade e metadados a localizar.
 - [x] Traduzir a interface para pt-BR sem alterar contratos, paths ou identificadores técnicos.
 - [x] Validar o build e a renderização da interface localizada.
+
+## Cobertura 360º — continuidade end-to-end
+
+- [ ] Habilitar GitHub Pages no fork e selecionar GitHub Actions como fonte de publicação.
+- [ ] Reexecutar o workflow `Lago 360 Docs` e validar a URL pública, o subcaminho `/lago/` e os ativos de referência.
+- [ ] Criar uma matriz rastreável OpenAPI → domínio funcional → tela → exemplo SDK → fonte bruta para identificar lacunas de cobertura.
+- [ ] Documentar autenticação, regiões, versionamento, idempotência, paginação, erros e limites da API antes dos guias por domínio.
+- [ ] Cobrir clientes, métricas faturáveis, planos, charges, assinaturas, eventos unitários e eventos em lote com contratos e exemplos verificáveis.
+- [ ] Cobrir faturas, pagamentos, solicitações de pagamento, wallets, transações de saldo, notas de crédito, impostos e analytics com seus fluxos de exceção.
+- [ ] Documentar webhooks, reconciliação, tentativas de reprocessamento, observabilidade e auditoria de uma cadeia de cobrança ponta a ponta.
+- [ ] Expandir os SDKs Python e Node.js gerados com exemplos executáveis, tratamento de erros, paginação e testes de contrato.
+- [ ] Evoluir o explorador OpenAPI para páginas profundas por domínio, URLs compartilháveis e referências cruzadas para exemplos e fontes.
+- [ ] Executar revisão de acessibilidade, responsividade, desempenho e internacionalização pt-BR da experiência documental.
+- [ ] Automatizar verificações de qualidade adicionais: links quebrados, lint de Markdown, cobertura da matriz e varredura de dependências.
+- [ ] Manter os raws, checksums, inventário de proveniência e versão OpenAPI sincronizados com atualizações upstream.
+- [ ] Adicionar testes end-to-end para o simulador de pricing, filtros OpenAPI, cópia de payload e navegação da documentação.
+- [ ] Atualizar o roteiro de slides, a skill reutilizável e o guia de CI/CD sempre que houver mudança relevante de contrato ou arquitetura.
