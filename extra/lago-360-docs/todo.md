@@ -4,15 +4,23 @@
 - [x] Preservar o HTML fornecido da documentação oficial do Lago como raw de referência.
 - [x] Renderizar screenshots dos dois HTMLs e registrar metadados, origem e checksums.
 - [x] Verificar o remoto GitHub e o estado da branch main.
-- [ ] Criar o commit da versão final da documentação Lago 360º.
-- [ ] Enviar o commit validado para a branch main.
+- [x] Criar o commit da versão final da documentação Lago 360º.
+- [x] Enviar o commit validado para a branch main.
 - [x] Confirmar o estado do fork Fernadoteixeira/lago e o diretório de integração.
 - [x] Criar ou sincronizar o fork do repositório getlago/lago.
 - [x] Integrar os materiais Lago 360º sem sobrescrever o código existente.
-- [ ] Criar e enviar o commit final para a branch main do fork.
+- [x] Criar e enviar o commit final para a branch main do fork.
 - [x] Clonar o fork Fernadoteixeira/lago em um diretório isolado do sandbox.
 - [x] Materializar a documentação Lago 360º em extra/lago-360-docs no clone local.
 - [x] Validar o inventário e o status Git da integração local.
 - [x] Instalar dependências e executar a checagem de tipos e o build da interface integrada.
 - [x] Gerar o roteiro de apresentação da estrutura de documentação integrada.
-- [ ] Criar o commit e enviar as alterações validadas para main do fork.
+- [x] Criar o commit e enviar as alterações validadas para main do fork.
+- [x] Executar a interface integrada localmente e verificar sua disponibilidade no sandbox.
+- [x] Configurar CI de validação e CD de deploy da documentação integrada.
+- [x] Gerar o roteiro completo de apresentação baseado em extra/lago-360-docs.
+- [x] Criar e validar uma skill reutilizável para esse fluxo de documentação integrada.
+- [x] Publicar as novas automações e os roteiros na branch main do fork.
+- [x] Inventariar textos visíveis, atributos de acessibilidade e metadados a localizar.
+- [x] Traduzir a interface para pt-BR sem alterar contratos, paths ou identificadores técnicos.
+- [x] Validar o build e a renderização da interface localizada.
