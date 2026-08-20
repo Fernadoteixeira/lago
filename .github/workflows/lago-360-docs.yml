@@ -61,8 +61,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          pnpm test:contract
           node --check examples/batch-events/batch-events.mjs
           python3 -m py_compile examples/batch-events/batch_events.py
+          node --check examples/commercial-flow/commercial-flow.mjs
+          python3 -m py_compile examples/commercial-flow/commercial_flow.py
 
       - name: Build static bundle
         run: pnpm build

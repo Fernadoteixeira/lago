@@ -10,6 +10,7 @@
     "preview": "vite preview --host",
     "check": "tsc --noEmit",
     "test": "vitest run",
+    "test:contract": "node examples/commercial-flow/validate-contract.mjs",
     "format": "prettier --write ."
   },
   "dependencies": {

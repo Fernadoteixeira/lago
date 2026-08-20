@@ -35,6 +35,14 @@
 - [ ] Adicionar testes de interface para simulador, filtros OpenAPI, busca, navegação e cópia de payload.
 - [ ] Adicionar gates de CI para links, Markdown, matriz de cobertura e regressão de bundle.
 
+### Corte canônico comercial — próximo impacto
+
+- [x] Extrair operações e schemas canônicos de métricas faturáveis, planos, charges e assinaturas do bundle OpenAPI 1.51.0.
+- [x] Substituir os guias genéricos de métricas, planos e assinaturas por dossiês com contrato, pré-condições, transições e exceções.
+- [x] Adicionar um exemplo ponta a ponta que crie métrica, plano com charge, cliente, assinatura e evento de uso idempotente.
+- [x] Validar localmente os payloads de exemplo contra os schemas OpenAPI preservados e testar a composição comercial sem chamadas destrutivas.
+- [ ] Publicar o corte canônico com testes, build, smoke test e rastreabilidade no fork.
+
 - [ ] Habilitar GitHub Pages no fork e selecionar GitHub Actions como fonte de publicação.
 - [ ] Reexecutar o workflow `Lago 360 Docs` e validar a URL pública, o subcaminho `/lago/` e os ativos de referência.
 - [ ] Criar uma matriz rastreável OpenAPI → domínio funcional → tela → exemplo SDK → fonte bruta para identificar lacunas de cobertura.
