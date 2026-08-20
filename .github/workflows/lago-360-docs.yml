@@ -68,6 +68,12 @@ jobs:
           node --check examples/commercial-flow/commercial-flow.mjs
           python3 -m py_compile examples/commercial-flow/commercial_flow.py
 
+      - name: Contract concurrency test
+        run: pnpm test:concurrency
+
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
       - name: Build static bundle
         run: pnpm build
         env:
@@ -82,16 +88,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          pnpm exec vite preview --host 127.0.0.1 --port 4174 > /tmp/lago-360-docs-preview.log 2>&1 &
+          base_path="/${{ github.event.repository.name }}/"
+          PORT=4174 BASE_PATH="$base_path" NODE_ENV=production pnpm start > /tmp/lago-360-docs-preview.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid"' EXIT
           for attempt in {1..20}; do
-            if curl --fail --silent --show-error http://127.0.0.1:4174/ > /tmp/lago-360-docs-home.html; then
+            if curl --fail --silent --show-error "http://127.0.0.1:4174${base_path}" > /tmp/lago-360-docs-home.html; then
               break
             fi
             sleep 1
           done
           grep -q "Lago 360" /tmp/lago-360-docs-home.html
+          UI_BASE_URL="http://127.0.0.1:4174${base_path}" pnpm test:subpaths
+          UI_BASE_URL="http://127.0.0.1:4174${base_path}" pnpm test:ui
 
       - name: Upload GitHub Pages artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

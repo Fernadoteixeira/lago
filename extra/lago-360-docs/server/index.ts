@@ -15,18 +15,23 @@ async function startServer() {
     process.env.NODE_ENV === "production"
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
+  const configuredBasePath = process.env.BASE_PATH?.trim() || "/";
+  const basePath =
+    configuredBasePath === "/"
+      ? "/"
+      : `/${configuredBasePath.replace(/^\/+|\/+$/g, "")}/`;
 
-  app.use(express.static(staticPath));
+  app.use(basePath, express.static(staticPath));
 
-  // Handle client-side routing - serve index.html for all routes
-  app.get("*", (_req, res) => {
+  // Handle client-side routing under the configured publication prefix.
+  app.use(basePath, (_req, res) => {
     res.sendFile(path.join(staticPath, "index.html"));
   });
 
   const port = process.env.PORT || 3000;
 
   server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
+    console.log(`Server running on http://localhost:${port}${basePath}`);
   });
 }
 

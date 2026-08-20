@@ -32,7 +32,7 @@
 - [x] Gerar a matriz de cobertura a partir do bundle OpenAPI e expor seus indicadores na interface.
 - [x] Implementar páginas profundas para fundamentos, eventos, métricas, planos, assinaturas e faturas com rotas compartilháveis.
 - [x] Criar exemplos verificáveis de fluxo ponta a ponta em Python e Node.js usando os contratos já extraídos para os cortes comercial e de batch events.
-- [ ] Adicionar testes de interface para simulador, filtros OpenAPI, busca, navegação e cópia de payload.
+- [x] Adicionar testes de interface para simulador, filtros OpenAPI, busca, navegação e cópia de payload.
 - [ ] Adicionar gates de CI para links, Markdown, matriz de cobertura e regressão de bundle.
 
 ### Corte canônico comercial — próximo impacto
@@ -62,5 +62,5 @@
 - [ ] Executar revisão de acessibilidade, responsividade, desempenho e internacionalização pt-BR da experiência documental.
 - [ ] Automatizar verificações de qualidade adicionais: links quebrados, lint de Markdown, cobertura da matriz e varredura de dependências.
 - [ ] Manter os raws, checksums, inventário de proveniência e versão OpenAPI sincronizados com atualizações upstream.
-- [ ] Adicionar testes end-to-end para o simulador de pricing, filtros OpenAPI, cópia de payload e navegação da documentação.
+- [x] Adicionar testes end-to-end para o simulador de pricing, filtros OpenAPI, cópia de payload e navegação da documentação.
 - [ ] Atualizar o roteiro de slides, a skill reutilizável e o guia de CI/CD sempre que houver mudança relevante de contrato ou arquitetura.
