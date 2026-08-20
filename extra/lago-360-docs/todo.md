@@ -67,6 +67,14 @@
 - [x] Evoluir os cardblocks da home com detalhes de interação e animações Framer Motion compatíveis com a UI oficial.
 - [ ] Validar desktop, mobile, teclado, redução de movimento, testes e publicação no fork.
 
+### Corte canônico financeiro — fechamento e reconciliação
+
+- [x] Extrair operações e schemas canônicos de faturas, pagamentos, notas de crédito, wallets e transações do OpenAPI 1.51.0.
+- [x] Implementar dossiês financeiros com estados, pré-condições, exceções e relação causal entre cobrança, fatura, pagamento e saldo.
+- [x] Adicionar exemplo idempotente de reconciliação de fatura, pagamento, crédito e wallet sem chamadas de escrita na API.
+- [x] Validar envelopes financeiros e invariantes de reconciliação localmente contra os contratos preservados.
+- [ ] Publicar o corte financeiro com testes, build, smoke test e rastreabilidade no fork.
+
 - [ ] Habilitar GitHub Pages no fork e selecionar GitHub Actions como fonte de publicação.
 - [ ] Reexecutar o workflow `Lago 360 Docs` e validar a URL pública, o subcaminho `/lago/` e os ativos de referência.
 - [ ] Criar uma matriz rastreável OpenAPI → domínio funcional → tela → exemplo SDK → fonte bruta para identificar lacunas de cobertura.
