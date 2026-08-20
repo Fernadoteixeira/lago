@@ -74,6 +74,9 @@ jobs:
           VITE_ANALYTICS_ENDPOINT: ${{ vars.VITE_ANALYTICS_ENDPOINT || '' }}
           VITE_ANALYTICS_WEBSITE_ID: ${{ vars.VITE_ANALYTICS_WEBSITE_ID || '' }}
 
+      - name: Verify production artifact
+        run: pnpm smoke-test
+
       - name: Smoke-test production preview
         shell: bash
         run: |

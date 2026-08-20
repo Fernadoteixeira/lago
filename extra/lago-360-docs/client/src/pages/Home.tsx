@@ -261,7 +261,7 @@ export default function Home() {
 
           <div className="batch-tabs" role="tablist" aria-label="Detalhes dos eventos em lote">
             {(["contract", "response", "errors"] as BatchPanel[]).map((panel) => (
-              <button key={panel} role="tab" aria-selected={batchPanel === panel} className={batchPanel === panel ? "is-active" : ""} onClick={() => setBatchPanel(panel)}>
+              <button type="button" key={panel} role="tab" aria-selected={batchPanel === panel} className={batchPanel === panel ? "is-active" : ""} onClick={() => setBatchPanel(panel)}>
                 {panel === "contract" ? "Contrato" : panel === "response" ? "Resposta" : "Falhas"}
               </button>
             ))}
@@ -269,7 +269,7 @@ export default function Home() {
 
           <div className="batch-grid">
             <div className="code-block-wrap">
-              <div className="code-header"><span>{selectedPanel.eyebrow}</span>{batchPanel === "contract" && <button onClick={copyPayload} aria-label="Copiar exemplo de payload"><Copy size={15} />copiar</button>}</div>
+              <div className="code-header"><span>{selectedPanel.eyebrow}</span>{batchPanel === "contract" && <button type="button" onClick={copyPayload} aria-label="Copiar exemplo de payload"><Copy size={15} />copiar</button>}</div>
               <pre><code>{selectedPanel.code}</code></pre>
               <div className="code-footer"><span className="http-method">POST</span><span>/events/batch</span></div>
             </div>
@@ -293,14 +293,14 @@ export default function Home() {
 
           <div className="pricing-control">
             <div><label htmlFor="units">Uso agregado no período</label><div className="units-readout"><strong>{units}</strong><span>unidades</span></div></div>
-            <input id="units" type="range" min="0" max="900" step="10" value={units} onChange={(event) => setUnits(Number(event.target.value))} />
+            <input id="units" type="range" min="0" max="900" step="10" value={units} aria-valuetext={`${units} unidades`} onChange={(event) => setUnits(Number(event.target.value))} />
             <div className="range-ticks"><span>0</span><span>100</span><span>500</span><span>900</span></div>
           </div>
 
           <div className="pricing-layout">
             <div className="model-toggle" role="tablist" aria-label="Modelo de cobrança">
               {(["graduated", "volume"] as ChargeModel[]).map((item) => (
-                <button key={item} className={model === item ? "is-active" : ""} onClick={() => setModel(item)}>
+                <button type="button" key={item} role="tab" aria-selected={model === item} className={model === item ? "is-active" : ""} onClick={() => setModel(item)}>
                   <span>{item === "graduated" ? "Graduado" : "Por volume"}</span>
                   <small>{item === "graduated" ? "incrementos por faixa" : "uma tarifa para todo o volume"}</small>
                 </button>
@@ -329,8 +329,8 @@ export default function Home() {
             <p>Filtre os domínios centrais, pesquise por caminho e encontre rapidamente a operação que conecta o seu fluxo de produto ao Lago.</p>
           </div>
           <div className="explorer-tools">
-            <div className="domain-filters" aria-label="Filtros de domínio">
-              {domains.map((item) => <button key={item} className={domain === item ? "is-active" : ""} onClick={() => setDomain(item)}>{item}</button>)}
+            <div className="domain-filters" role="group" aria-label="Filtros de domínio">
+              {domains.map((item) => <button type="button" key={item} aria-pressed={domain === item} className={domain === item ? "is-active" : ""} onClick={() => setDomain(item)}>{item}</button>)}
             </div>
             <label className="search-field"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar caminho ou operação" aria-label="Buscar operação da API" /><span>{visibleEndpoints.length}</span></label>
           </div>
@@ -349,8 +349,8 @@ export default function Home() {
             <a className="source-doc" href="https://getlago.com/docs/guide/plans/charges/charge-models/volume" target="_blank" rel="noreferrer"><Layers3 size={26} /><span>Precificação</span><strong>Modelo por volume</strong><em>Documentação oficial <ArrowUpRight size={14} /></em></a>
           </div>
           <div className="visual-references">
-            <figure><img src="/manus-storage/lago-landing-reference_686d2548.png" alt="Captura preservada da navegação de documentação do Lago em tema escuro" /><figcaption>Referência visual: navegação e busca da documentação.</figcaption></figure>
-            <figure><img src="/manus-storage/lago-docs-reference_3d11d3f7.png" alt="Captura preservada da landing institucional do Lago com mockup de fatura" /><figcaption>Referência visual: produto, uso, créditos e fatura.</figcaption></figure>
+            <figure><img src="/manus-storage/lago-landing-reference_686d2548.png" alt="Captura preservada da navegação de documentação do Lago em tema escuro" loading="lazy" decoding="async" /><figcaption>Referência visual: navegação e busca da documentação.</figcaption></figure>
+            <figure><img src="/manus-storage/lago-docs-reference_3d11d3f7.png" alt="Captura preservada da landing institucional do Lago com mockup de fatura" loading="lazy" decoding="async" /><figcaption>Referência visual: produto, uso, créditos e fatura.</figcaption></figure>
           </div>
         </section>
 
