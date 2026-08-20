@@ -41,7 +41,7 @@
 - [x] Substituir os guias genéricos de métricas, planos e assinaturas por dossiês com contrato, pré-condições, transições e exceções.
 - [x] Adicionar um exemplo ponta a ponta que crie métrica, plano com charge, cliente, assinatura e evento de uso idempotente.
 - [x] Validar localmente os payloads de exemplo contra os schemas OpenAPI preservados e testar a composição comercial sem chamadas destrutivas.
-- [ ] Publicar o corte canônico com testes, build, smoke test e rastreabilidade no fork.
+- [x] Publicar o corte canônico com testes, build, smoke test e rastreabilidade no fork.
 
 - [ ] Habilitar GitHub Pages no fork e selecionar GitHub Actions como fonte de publicação.
 - [ ] Reexecutar o workflow `Lago 360 Docs` e validar a URL pública, o subcaminho `/lago/` e os ativos de referência.
