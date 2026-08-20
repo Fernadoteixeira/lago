@@ -66,7 +66,7 @@ const domains = [
   "Assinaturas",
   "Faturas",
   "Pagamentos",
-  "Carteiras",
+  "Wallets",
   "Crédito",
   "Analytics",
 ] as const;
@@ -78,10 +78,10 @@ const endpoints = [
   { domain: "Eventos", method: "POST", path: "/events/batch", summary: "Recebe até 100 eventos em uma única requisição.", tag: "usage" },
   { domain: "Eventos", method: "GET", path: "/events/{transaction_id}", summary: "Consulta um evento pela identidade de transação.", tag: "usage" },
   { domain: "Métricas", method: "POST", path: "/billable_metrics", summary: "Cria uma regra de agregação de uso.", tag: "metering" },
-  { domain: "Métricas", method: "GET", path: "/billable_metrics/{code}", summary: "Consulta a métrica usada por uma cobrança baseada em uso.", tag: "metering" },
-  { domain: "Planos", method: "POST", path: "/plans", summary: "Cria um plano com preço base e cobranças por uso.", tag: "pricing" },
-  { domain: "Planos", method: "POST", path: "/plans/{code}/charges", summary: "Adiciona uma cobrança baseada em uso ao plano.", tag: "pricing" },
-  { domain: "Planos", method: "GET", path: "/plans/{code}", summary: "Obtém a configuração do plano e suas cobranças por uso.", tag: "pricing" },
+  { domain: "Métricas", method: "GET", path: "/billable_metrics/{code}", summary: "Consulta a métrica usada por uma charge.", tag: "metering" },
+  { domain: "Planos", method: "POST", path: "/plans", summary: "Cria plano com preço base e charges de uso.", tag: "pricing" },
+  { domain: "Planos", method: "POST", path: "/plans/{code}/charges", summary: "Adiciona uma usage-based charge ao plano.", tag: "pricing" },
+  { domain: "Planos", method: "GET", path: "/plans/{code}", summary: "Obtém a configuração do plano e suas charges.", tag: "pricing" },
   { domain: "Assinaturas", method: "POST", path: "/subscriptions", summary: "Atribui um plano a um cliente externo.", tag: "billing" },
   { domain: "Assinaturas", method: "PUT", path: "/subscriptions/{external_id}", summary: "Atualiza a assinatura externa.", tag: "billing" },
   { domain: "Assinaturas", method: "GET", path: "/subscriptions/{external_id}/lifetime_usage", summary: "Consulta uso acumulado da assinatura.", tag: "billing" },
@@ -90,8 +90,8 @@ const endpoints = [
   { domain: "Faturas", method: "POST", path: "/invoices/{lago_id}/payment_url", summary: "Gera uma URL de pagamento de fatura.", tag: "invoicing" },
   { domain: "Pagamentos", method: "POST", path: "/payments", summary: "Registra um pagamento.", tag: "collections" },
   { domain: "Pagamentos", method: "GET", path: "/payment_requests", summary: "Lista solicitações de pagamento.", tag: "collections" },
-  { domain: "Carteiras", method: "GET", path: "/customers/{external_customer_id}/wallets", summary: "Consulta créditos pré-pagos de um cliente.", tag: "credits" },
-  { domain: "Carteiras", method: "POST", path: "/wallet_transactions", summary: "Cria transações de saldo na carteira.", tag: "credits" },
+  { domain: "Wallets", method: "GET", path: "/customers/{external_customer_id}/wallets", summary: "Consulta créditos pré-pagos de um cliente.", tag: "credits" },
+  { domain: "Wallets", method: "POST", path: "/wallet_transactions", summary: "Cria transações de saldo em wallet.", tag: "credits" },
   { domain: "Crédito", method: "POST", path: "/credit_notes", summary: "Cria uma nota de crédito.", tag: "credits" },
   { domain: "Crédito", method: "PUT", path: "/credit_notes/{lago_id}/void", summary: "Anula uma nota de crédito.", tag: "credits" },
   { domain: "Analytics", method: "GET", path: "/analytics/mrr", summary: "Consulta MRR por período.", tag: "analytics" },
@@ -100,7 +100,7 @@ const endpoints = [
 ] as const;
 
 function money(value: number) {
-  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "USD" }).format(value);
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 
 function calculateGraduated(units: number) {
@@ -119,11 +119,11 @@ function MetricRail() {
   return (
     <div className="metric-rail" aria-label="Cadeia de cobrança">
       {[
-        ["01", "Evento", "identificador da transação"],
+        ["01", "Evento", "transaction_id"],
         ["02", "Métrica", "agregação"],
         ["03", "Cobrança", "precificação"],
-        ["04", "Fee", "valor"],
-        ["05", "Fatura", "documento de cobrança"],
+        ["04", "Valor", "fee"],
+        ["05", "Fatura", "documento"],
       ].map(([index, title, caption], indexPosition) => (
         <div className="rail-stage" key={title}>
           <div className={`rail-node ${indexPosition === 1 || indexPosition === 3 ? "rail-node--signal" : ""}`}>{index}</div>
@@ -135,13 +135,16 @@ function MetricRail() {
   );
 }
 
+function RouteMarker({ step, label, note }: { step: string; label: string; note: string }) {
+  return <div className="route-marker" aria-label={`Etapa ${step}: ${label}`}><span>{step}</span><i aria-hidden="true" /><strong>{label}</strong><em>{note}</em></div>;
+}
+
 export default function Home() {
   const [batchPanel, setBatchPanel] = useState<BatchPanel>("contract");
   const [units, setUnits] = useState(450);
   const [model, setModel] = useState<ChargeModel>("graduated");
   const [domain, setDomain] = useState<Domain>("Todos");
   const [query, setQuery] = useState("");
-  const referenceBase = import.meta.env.BASE_URL;
   const graduated = calculateGraduated(units);
   const volume = calculateVolume(units);
   const displayedValue = model === "graduated" ? graduated.total : volume.total;
@@ -158,14 +161,14 @@ export default function Home() {
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   const copyPayload = () => {
     navigator.clipboard?.writeText(payload).then(
-      () => toast.success("Corpo da requisição copiado para a área de transferência."),
-      () => toast.error("Não foi possível copiar o corpo da requisição neste navegador."),
+      () => toast.success("Payload copiado para a área de transferência."),
+      () => toast.error("Não foi possível copiar o payload neste navegador."),
     );
   };
 
   const panelContent = {
     contract: {
-      eyebrow: "Contrato da requisição",
+      eyebrow: "Contrato do request",
       code: payload,
       title: "O lote é um envelope de eventos completos.",
       text: "Cada item conserva a sua assinatura, a métrica que será medida e um identificador de transação que permite rastreamento e idempotência.",
@@ -180,8 +183,8 @@ export default function Home() {
       title: "200 confirma recepção; não confirma faturamento imediato.",
       text: "O processamento é assíncrono. Na resposta inicial, lago_customer_id pode ser null, porque a correlação do cliente acontece no pipeline posterior.",
       notes: [
-        ["T0", "Lote recebido pela API."],
-        ["T1", "Uso processado e disponível para compor a cobrança."],
+        ["T0", "Batch recebido pela API."],
+        ["T1", "Uso processado e disponível para compor billing."],
       ],
     },
     errors: {
@@ -210,7 +213,7 @@ export default function Home() {
           {[
             ["overview", "Visão geral", Network],
             ["batch", "Eventos em lote", Activity],
-            ["pricing", "Modelos de precificação", CircleDollarSign],
+            ["pricing", "Modelos de cobrança", CircleDollarSign],
             ["openapi", "Explorador OpenAPI", FileCode2],
             ["sources", "Proveniência", ShieldCheck],
           ].map(([id, label, Icon]) => (
@@ -238,7 +241,7 @@ export default function Home() {
           <div className="hero-copy">
             <p className="eyebrow">Atlas de operação / Cobrança Lago</p>
             <h1>Do uso bruto<br /><em>à evidência</em><br />de cobrança.</h1>
-            <p className="hero-summary">Uma leitura 360º do caminho que liga eventos de produto, regras de metering, modelos de preço e faturas no Lago.</p>
+            <p className="hero-summary">Uma leitura 360º do caminho que liga eventos de produto, regras de medição, modelos de preço e faturas no Lago.</p>
             <div className="hero-actions">
               <Button className="atlas-button" onClick={() => scrollTo("batch")}>Mapear eventos em lote <ArrowDownRight size={17} /></Button>
               <button className="text-action" onClick={() => scrollTo("pricing")}>Comparar modelos <ArrowUpRight size={16} /></button>
@@ -252,13 +255,14 @@ export default function Home() {
         </section>
 
         <section className="signal-strip" aria-label="Resumo da API">
-          <div><strong>122</strong><span>caminhos no pacote OpenAPI</span></div>
-          <div><strong>202</strong><span>operações catalogadas</span></div>
-          <div><strong>100</strong><span>eventos por lote</span></div>
-          <div><strong>2</strong><span>modelos comparados aqui</span></div>
+          <div><em>CATÁLOGO</em><strong>122</strong><span>caminhos no pacote OpenAPI</span></div>
+          <div><em>MAPA</em><strong>202</strong><span>operações catalogadas</span></div>
+          <div><em>LIMITE VÁLIDO</em><strong>100</strong><span>eventos por lote</span></div>
+          <div><em>DECISÃO</em><strong>2</strong><span>modelos comparados aqui</span></div>
         </section>
 
         <section id="batch" className="content-section batch-section scroll-target">
+          <RouteMarker step="01" label="EVENTO" note="a ingestão inaugura a trilha de cobrança" />
           <div className="section-heading">
             <div><p className="eyebrow">01 / Ingestão</p><h2>Eventos em lote sem zonas cegas.</h2></div>
             <p>O envio em lote reduz a sobrecarga de transporte; a interpretação de cada item continua dependente da assinatura, métrica, propriedades e regras aplicáveis.</p>
@@ -274,7 +278,7 @@ export default function Home() {
 
           <div className="batch-grid">
             <div className="code-block-wrap">
-              <div className="code-header"><span>{selectedPanel.eyebrow}</span>{batchPanel === "contract" && <button onClick={copyPayload} aria-label="Copiar corpo de exemplo"><Copy size={15} />copiar</button>}</div>
+              <div className="code-header"><span>{selectedPanel.eyebrow}</span>{batchPanel === "contract" && <button onClick={copyPayload} aria-label="Copiar exemplo de payload"><Copy size={15} />copiar</button>}</div>
               <pre><code>{selectedPanel.code}</code></pre>
               <div className="code-footer"><span className="http-method">POST</span><span>/events/batch</span></div>
             </div>
@@ -290,6 +294,7 @@ export default function Home() {
         </section>
 
         <section id="pricing" className="content-section pricing-section scroll-target">
+          <RouteMarker step="03" label="COBRANÇA" note="a regra de preço interpreta a quantidade medida" />
           <div className="section-heading pricing-heading">
             <div><p className="eyebrow">02 / Precificação</p><h2>O mesmo uso conta histórias de receita diferentes.</h2></div>
             <p>Simulador didático baseado em três faixas: 0–100 a US$ 0,10, 101–500 a US$ 0,08, e 501+ a US$ 0,05 por unidade.</p>
@@ -327,9 +332,10 @@ export default function Home() {
         </section>
 
         <section id="openapi" className="content-section explorer-section scroll-target">
+          <RouteMarker step="04" label="VALOR" note="o contrato conecta configuração, fee e consulta" />
           <div className="section-heading">
             <div><p className="eyebrow">03 / OpenAPI</p><h2>Explore o contrato por domínio.</h2></div>
-            <p>Filtre os domínios centrais, pesquise por path e encontre rapidamente a operação que conecta o seu fluxo de produto ao Lago.</p>
+            <p>Filtre os domínios centrais, pesquise por caminho e encontre rapidamente a operação que conecta o seu fluxo de produto ao Lago.</p>
           </div>
           <div className="explorer-tools">
             <div className="domain-filters" aria-label="Filtros de domínio">
@@ -344,6 +350,7 @@ export default function Home() {
         </section>
 
         <section id="sources" className="content-section provenance-section scroll-target">
+          <RouteMarker step="05" label="FATURA" note="a evidência final preserva origem, regra e documento" />
           <div className="section-heading"><div><p className="eyebrow">04 / Proveniência</p><h2>Fontes preservadas para investigação contínua.</h2></div><p>Os arquivos brutos OpenAPI, páginas de precificação e capturas renderizadas foram mantidos com inventário e SHA-256 para apoiar análise técnica e criação de referências.</p></div>
           <div className="provenance-grid">
             <a className="source-doc" href="https://github.com/getlago/lago-openapi" target="_blank" rel="noreferrer"><FileCode2 size={26} /><span>OpenAPI</span><strong>Bundle e schemas oficiais</strong><em>getlago/lago-openapi <ArrowUpRight size={14} /></em></a>
@@ -351,8 +358,8 @@ export default function Home() {
             <a className="source-doc" href="https://getlago.com/docs/guide/plans/charges/charge-models/volume" target="_blank" rel="noreferrer"><Layers3 size={26} /><span>Precificação</span><strong>Modelo por volume</strong><em>Documentação oficial <ArrowUpRight size={14} /></em></a>
           </div>
           <div className="visual-references">
-            <figure><img src={`${referenceBase}reference-images/lago-landing-reference.png`} alt="Captura preservada da navegação de documentação do Lago em tema escuro" /><figcaption>Referência visual: navegação e busca da documentação.</figcaption></figure>
-            <figure><img src={`${referenceBase}reference-images/lago-docs-reference.png`} alt="Captura preservada da landing institucional do Lago com mockup de fatura" /><figcaption>Referência visual: produto, uso, créditos e fatura.</figcaption></figure>
+            <figure><img src="/manus-storage/lago-landing-reference_686d2548.png" alt="Captura preservada da navegação de documentação do Lago em tema escuro" /><figcaption>Referência visual: navegação e busca da documentação.</figcaption></figure>
+            <figure><img src="/manus-storage/lago-docs-reference_3d11d3f7.png" alt="Captura preservada da landing institucional do Lago com mockup de fatura" /><figcaption>Referência visual: produto, uso, créditos e fatura.</figcaption></figure>
           </div>
         </section>
 

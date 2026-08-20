@@ -70,3 +70,7 @@ O símbolo é um núcleo circular dividido por três trilhas de telemetria, suge
 ## Decisões de estilo
 
 O `DESIGN.md` não existia nos arquivos compartilhados nem no checkout local consultado. Foi criado neste projeto como contrato de implementação, a partir da abordagem selecionada acima, e será aplicado integralmente.
+
+- **Lima de sinal:** usar `#C4F16A` em rota ativa, estado válido, marcador de fluxo, seleção e numeral crítico; nunca como preenchimento dominante de superfícies extensas.
+- **Fluxo causal:** explicitar em cada seção a ligação entre evento, métrica, cobrança, valor e fatura por marcadores sequenciais e trilhas pontilhadas.
+- **Assimetria contínua:** manter tensão editorial entre painéis, tabelas e blocos de leitura; evitar que seções intermediárias virem uma landing page centralizada convencional.
